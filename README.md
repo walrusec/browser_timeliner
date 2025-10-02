@@ -23,6 +23,12 @@ Browser Timeliner is a forensic toolkit for security analysts to ingest, inspect
 
 ## Installation
 
+### Installing from PyPI 
+
+```bash
+python3.11 -m pip install browser-timeliner
+```
+
 ### Local editable install (recommended for development)
 
 ```bash
@@ -42,12 +48,6 @@ If you have a built wheel in `dist/`, install it into a clean environment:
 python3.11 -m venv timeliner-env
 source timeliner-env/bin/activate
 python3.11 -m pip install dist/browser_timeliner-0.1.0-py3-none-any.whl
-```
-
-### Installing from PyPI (when published)
-
-```bash
-python3.11 -m pip install browser-timeliner
 ```
 
 All distributions require Python 3.11.x because of the constraint in `pyproject.toml` (`requires-python = "==3.11.*"`).
