@@ -1,0 +1,410 @@
+rules:
+  - name: "High-Risk & Confusable TLDs"
+    category: threat_indicator
+    tags: [Suspicious TLD]
+    description: "TLDs with very high abuse rates or that mimic common file extensions."
+    conditions:
+      tlds:
+        - tk
+        - ml
+        - ga
+        - cf
+        - gq
+        - xyz
+        - top
+        - pw
+        - cc
+        - ws
+        - info
+        - online
+        - site
+        - icu
+        - cyou
+        - buzz
+        - pro
+        - cam
+        - link
+        - click
+        - beauty
+        - work
+        - zip
+        - mov
+        - exe
+        - app
+    severity: high
+    risk_score: 85
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "Geopolitical Risk TLDs"
+    category: geopolitical_risk_tld
+    tags: [Suspicious GEO]
+    description: "Country-code TLDs from sanctioned or conflict regions; treat as context."
+    conditions:
+      tlds:
+        - ru
+        - cn
+        - kp
+        - ir
+        - sy
+        - by
+        - cu
+        - sd
+        - ve
+        - ua
+        - pk
+        - ng
+        - my
+        - vn
+        - id
+        - bd
+        - eg
+        - in
+    severity: medium
+    risk_score: 60
+    false_positive_rate: high
+    ioc_type: domain
+
+  - name: "Unicode Domain"
+    category: unicode_domain
+    tags: [Unicode Domain]
+    description: "Internationalized domains mixing scripts or containing confusable characters."
+    conditions:
+      contains_unicode: true
+      mixed_scripts: true
+    severity: high
+    risk_score: 75
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "Local Network Activity"
+    category: local_network_activity
+    tags: [Internal]
+    description: "Access to RFC1918 or loopback ranges; annotated for filtering, not risk."
+    conditions:
+      ip_ranges:
+        - 192.168.0.0/16
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 127.0.0.0/8
+        - localhost
+    severity: informational
+    risk_score: 5
+    false_positive_rate: very_high
+    ioc_type: ip_address
+
+  - name: "Direct IP Access"
+    category: direct_ip_access
+    tags: [Direct IP]
+    description: "Sessions that bypass DNS and target raw IP addresses (excluding local ranges)."
+    conditions:
+      require_ip: true
+      exclude_local: true
+    severity: high
+    risk_score: 70
+    false_positive_rate: medium
+    ioc_type: ip_address
+
+  - name: "Dynamic DNS & Fast-Flux"
+    category: dynamic_dns_fast_flux
+    tags: [Dynamic DNS]
+    description: "Dynamic DNS providers frequently used to hide malicious infrastructure."
+    conditions:
+      hostname_suffixes:
+        - duckdns.org
+        - no-ip.
+        - ddns.net
+        - changeip.
+        - freedns.
+        - afraid.org
+        - dynu.
+        - zapto.org
+        - sytes.net
+        - servegame.com
+        - hopto.org
+        - myddns.me
+        - ddnsking.com
+        - gotdns.ch
+        - dnsdojo.com
+    severity: high
+    risk_score: 75
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "URL Shorteners & Redirectors"
+    category: url_shortener
+    tags: [Domain Shortener]
+    description: "Commercial shorteners and redirect chains that commonly hide destinations."
+    conditions:
+      hostname_suffixes:
+        - bit.ly
+        - tinyurl.com
+        - t.co
+        - goo.gl
+        - ow.ly
+        - is.gd
+        - buff.ly
+        - short.io
+        - rebrand.ly
+        - cutt.ly
+        - adf.ly
+        - linkbucks.com
+        - shorte.st
+        - bc.vc
+        - ouo.io
+        - clk.sh
+        - clicksfly.com
+    severity: medium
+    risk_score: 60
+    false_positive_rate: low
+    ioc_type: domain
+
+  - name: "Anonymization Services"
+    category: anonymization_service
+    tags: [Anonymization Services]
+    description: "Tor gateways, VPN providers, and browser proxies used to mask origin."
+    conditions:
+      hostname_contains: [proxy, unblock, bypass, tor, vpn]
+      tlds: [onion]
+      hostname_suffixes:
+        - torproject.org
+        - onion.to
+        - nordvpn.
+        - expressvpn.
+        - protonvpn.
+        - surfshark.
+        - privateinternetaccess.
+        - hidemyass.
+        - teamviewer.com
+        - anydesk.com
+        - logmein.com
+        - ultraviewer.net
+        - rustdesk.com
+    severity: medium
+    risk_score: 65
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "Remote Access & RMM Platforms"
+    category: remote_access
+    tags: [Remote Access]
+    description: "Commercial remote-administration suites that warrant scrutiny."
+    conditions:
+      hostname_suffixes:
+        - connectwise.com
+        - datto.com
+        - syncromsp.com
+        - kaseya.com
+        - n-able.com
+        - atera.com
+        - ninjarmm.com
+        - solarwindsmsp.com
+        - remoteutilities.com
+        - remotepc.com
+        - screenconnect.com
+        - beyondtrust.com
+        - bomgar.com
+    severity: high
+    risk_score: 70
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "Staging & Paste Services"
+    category: staging_paste_service
+    tags: [Staging & Paste Services]
+    description: "Pastebins and anonymous media hosts commonly used to stage payloads."
+    conditions:
+      hostname_suffixes:
+        - pastebin.com
+        - paste.ee
+        - hastebin.com
+        - ghostbin.com
+        - controlc.com
+        - imgur.com
+        - imgbb.com
+        - postimg.cc
+        - imgbox.com
+        - prnt.sc
+        - gyazo.com
+    severity: medium
+    risk_score: 55
+    false_positive_rate: medium
+    ioc_type: domain
+
+  - name: "Disposable Email"
+    category: disposable_email
+    tags: [Disposable Email]
+    description: "Temporary mail domains linked to account fraud and automation."
+    conditions:
+      hostname_suffixes:
+        - guerrillamail.
+        - 10minutemail.
+        - tempmail.
+        - temp-mail.
+        - mailinator.
+        - maildrop.
+        - throwawaymail.
+        - yopmail.
+        - getnada.
+        - trashmail.
+        - mailsac.com
+        - burnermail.io
+    severity: medium
+    risk_score: 60
+    false_positive_rate: low
+    ioc_type: domain
+
+  - name: "Suspicious URL"
+    category: suspicious_url
+    tags: [Suspicious URL]
+    description: "Brand impersonation strings and high-risk paths observed in phishing kits."
+    conditions:
+      url_contains:
+        - paypal-secure
+        - apple-support
+        - microsoft-security
+        - amazon-verify
+        - netflix-billing
+        - google-verify
+        - facebook-security
+        - instagram-help
+        - twitter-verify
+        - linkedin-secure
+        - bank-of-america
+        - wellsfargo-online
+        - chase-verify
+      path_contains:
+        - /login
+        - /signin
+        - /verify
+        - /confirm
+        - /account/suspended
+        - /account/locked
+        - /security/alert
+        - /payment/update
+        - /billing/problem
+        - /restore-account
+      hostname_contains:
+        - secure-
+        - verify-
+        - account-
+        - login-
+        - update-
+        - confirm-
+    severity: critical
+    risk_score: 92
+    false_positive_rate: medium
+    ioc_type: url_pattern
+
+  - name: "Application"
+    category: application_download
+    tags: [Application]
+    description: "Executable binaries and automation scripts across major platforms."
+    conditions:
+      path_extensions:
+        - exe
+        - msi
+        - dmg
+        - pkg
+        - app
+        - apk
+        - ipa
+        - deb
+        - rpm
+        - sh
+        - ps1
+        - js
+        - vbs
+        - py
+        - rb
+        - php
+        - lua
+    severity: high
+    risk_score: 80
+    false_positive_rate: medium
+    ioc_type: file_download
+
+  - name: "Document & Archive Downloads"
+    category: download
+    tags: [Office Document Download]
+    description: "Macro-enabled office files, PDFs, and compressed archives."
+    conditions:
+      path_extensions:
+        - doc
+        - docx
+        - docm
+        - xls
+        - xlsm
+        - ppt
+        - pdf
+        - rtf
+    severity: medium
+    risk_score: 65
+    false_positive_rate: high
+    ioc_type: file_download
+
+  - name: "Archive"
+    category: archive_download
+    tags: [Archive]
+    description: "Large media downloads tracked for policy or bandwidth review."
+    conditions:
+      path_extensions:
+        - zip
+        - rar
+        - 7z
+        - tar
+        - gz
+        - iso
+        - img
+        - vhd
+    severity: low
+    risk_score: 20
+    false_positive_rate: very_high
+    ioc_type: file_download
+
+  - name: "Media"
+    category: media_download
+    tags: [Media]
+    description: "Large media downloads tracked for policy or bandwidth review."
+    conditions:
+      path_extensions:
+        - mp4
+        - avi
+        - mkv
+        - mov
+        - wmv
+        - mp3
+        - flac
+        - wav
+        - png
+        - jpg
+        - svg
+    severity: low
+    risk_score: 20
+    false_positive_rate: very_high
+    ioc_type: file_download
+
+  - name: "Systems/IT"
+    category: systems_it
+    tags: [Systems/IT]
+    description: "Configuration files, certificates, and backups likely to contain secrets."
+    conditions:
+      path_extensions:
+        - pem
+        - crt
+        - key
+        - pfx
+        - jks
+        - config
+        - conf
+        - cfg
+        - env
+        - ini
+        - bak
+        - backup
+        - old
+        - tmp
+    severity: high
+    risk_score: 75
+    false_positive_rate: medium
+    ioc_type: file_download

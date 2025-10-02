@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling==1.21.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "browser-timeliner"
+version = "0.1.0"
+description = "Multi-browser artifact analysis toolkit"
+readme = "README.md"
+authors = [{ name = "Browser Timeliner Team" }]
+license = { text = "Proprietary" }
+requires-python = "==3.11.*"
+dependencies = [
+    "PyYAML==6.0.1",
+    ]
+
+[project.optional-dependencies]
+test = ["pytest==8.2.2"]
+
+[project.scripts]
+browser-timeliner = "browser_timeliner.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["browser_timeliner"]
+
+[tool.hatch.envs.default]
+python = "3.11"
+dependencies = ["pip==24.1"]
+
+[tool.hatch.envs.dev]
+dependencies = [
+    "pytest==8.2.2",
+    "pyinstaller==6.3.0"
+]
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+addopts = "-q"
