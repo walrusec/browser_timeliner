@@ -1,6 +1,7 @@
 # Browser Timeliner
 
-Browser Timeliner turns Chromium and Firefox history artifacts into timelines, rule hits, and anomaly callouts straight from the terminal.
+CLI utility to covert Chromium and Firefox history artifacts into timelines using json, csv, xlsx, html outputs.
+Analyze results against established rules to identify events of interest and anomalies straight from the terminal.
 
 ## Quick start
 
