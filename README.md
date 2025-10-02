@@ -5,12 +5,12 @@ Browser Timeliner turns Chromium and Firefox history artifacts into timelines, r
 ## Quick start
 
 ```bash
+python3.11 -m venv timeliner && source timeliner/bin/activate
 python3.11 -m pip install browser-timeliner
-browser-timeliner /path/to/profile --summary-only
+browser-timeliner /path/to/profile-or-history-file --summary-only --export timeline.csv --export-format csv
 ```
 
-- Python 3.11.x is required (`pyproject.toml` pins `==3.11.*`).
-- Use a virtual environment for isolation (`python3.11 -m venv timeliner && source timeliner/bin/activate`).
+https://github.com/user-attachments/assets/01b9bef4-228e-41d1-b7b0-25da4c55af96
 
 ## Documentation
 
