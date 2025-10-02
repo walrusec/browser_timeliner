@@ -52,6 +52,14 @@ python3.11 -m pip install browser-timeliner
 
 All distributions require Python 3.11.x because of the constraint in `pyproject.toml` (`requires-python = "==3.11.*"`).
 
+To upgrade to the latest release:
+
+```bash
+python3.11 -m pip install --upgrade browser-timeliner
+```
+
+If you prefer isolating the install from the system interpreter, create a dedicated virtual environment before running the install or upgrade command.
+
 ### Building release artifacts
 
 Create source and wheel artifacts for distribution:
